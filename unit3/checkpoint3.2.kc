@@ -9,6 +9,8 @@ const char BLACK = 0;
 const char WHITE = 1;
 unsigned char *current_screen_line = $0400;
 unsigned char current_screen_x = 0;
+unsigned short mem_start = $0800;
+unsigned short mem_end = $0800;
 
 void main(){
 }
