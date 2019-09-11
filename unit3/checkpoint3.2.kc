@@ -11,6 +11,7 @@ unsigned char *current_screen_line = $0400;
 unsigned char current_screen_x = 0;
 unsigned short mem_start = $0800;
 unsigned short mem_end = $0800;
+volatile unsigned char *p;
 
 void main(){
 }
@@ -30,6 +31,12 @@ current_screen_x++;
 void print_newline(){
 current_screen_line += 40;
 current_screen_x= 0;
+}
+
+void test_memory(){
+
+
+
 }
 
 void reset() {
