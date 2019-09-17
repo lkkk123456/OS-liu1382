@@ -48,7 +48,7 @@ print_to_screen(hex);
 
 void test_memory(){
 	unsigned short mem_start = $0800;
-	unsigned short mem_end = $7FFF;
+	unsigned short mem_end = $0800;
 	volatile unsigned char *p;
 
 	for(mem_start=$0800; mem_start<$7FFF; mem_start++){
@@ -57,16 +57,17 @@ void test_memory(){
 	for(char value =0; value<255; value++){
 		*p = value;
 		if(*p!=value){
-			
+break;
+			}
+else{
 			print_to_screen("the value is $");
                         print_hex((unsigned short)p);			
-                        print_newline();
-		}
-		
-	}
+                        print_newline();		
+			}
 break;
 }
          
+}
 }
 void reset() {
 *VIC_MEMORY = 0x14;
