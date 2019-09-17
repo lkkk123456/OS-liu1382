@@ -64,7 +64,7 @@ else{
                         print_hex((unsigned short)p);			
                         print_newline();		
 			}
-break;
+
 }
          
 }
