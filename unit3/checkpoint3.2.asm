@@ -14,9 +14,9 @@
   .label current_screen_x = 7
   .label current_screen_line = 3
   .label current_screen_line_24 = 5
-  .label current_screen_line_46 = 5
   .label current_screen_line_47 = 5
   .label current_screen_line_48 = 5
+  .label current_screen_line_49 = 5
 .segment Code
 main: {
     rts
@@ -322,9 +322,9 @@ reset: {
     sta.z current_screen_line+1
     jsr print_newline
     lda.z current_screen_line
-    sta.z current_screen_line_47
+    sta.z current_screen_line_48
     lda.z current_screen_line+1
-    sta.z current_screen_line_47+1
+    sta.z current_screen_line_48+1
     lda #0
     sta.z current_screen_x
     lda #<M2
@@ -378,9 +378,9 @@ test_memory: {
     cmp (p),y
     beq b5
     lda.z current_screen_line
-    sta.z current_screen_line_48
+    sta.z current_screen_line_49
     lda.z current_screen_line+1
-    sta.z current_screen_line_48+1
+    sta.z current_screen_line_49+1
     lda #<message
     sta.z print_to_screen.message
     lda #>message
@@ -414,7 +414,8 @@ print_newline: {
 }
 // print_hex(word zeropage(8) value)
 print_hex: {
-    .label _4 = $e
+    .label _3 = $e
+    .label _6 = $10
     .label value = 8
     ldx #0
   b1:
@@ -423,9 +424,9 @@ print_hex: {
     lda #0
     sta hex+4
     lda.z current_screen_line
-    sta.z current_screen_line_46
+    sta.z current_screen_line_47
     lda.z current_screen_line+1
-    sta.z current_screen_line_46+1
+    sta.z current_screen_line_47+1
     lda #<hex
     sta.z print_to_screen.message
     lda #>hex
@@ -435,30 +436,30 @@ print_hex: {
   b2:
     lda.z value+1
     cmp #>$a000
-    bcc !+
-    bne b4
+    bcc b4
+    bne !+
     lda.z value
     cmp #<$a000
-    bcs b4
+    bcc b4
   !:
     ldy #$c
     lda.z value
-    sta.z _4
+    sta.z _3
     lda.z value+1
-    sta.z _4+1
+    sta.z _3+1
     cpy #0
     beq !e+
   !:
-    lsr.z _4+1
-    ror.z _4
+    lsr.z _3+1
+    ror.z _3
     dey
     bne !-
   !e:
-    lda.z _4
-    clc
-    adc #'0'
+    lda.z _3
+    sec
+    sbc #9
     sta hex,x
-  b4:
+  b5:
     asl.z value
     rol.z value+1
     asl.z value
@@ -469,6 +470,25 @@ print_hex: {
     rol.z value+1
     inx
     jmp b1
+  b4:
+    ldy #$c
+    lda.z value
+    sta.z _6
+    lda.z value+1
+    sta.z _6+1
+    cpy #0
+    beq !e+
+  !:
+    lsr.z _6+1
+    ror.z _6
+    dey
+    bne !-
+  !e:
+    lda.z _6
+    clc
+    adc #'0'
+    sta hex,x
+    jmp b5
   .segment Data
     hex: .fill 5, 0
 }
