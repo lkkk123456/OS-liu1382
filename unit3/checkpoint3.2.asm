@@ -14,9 +14,9 @@
   .label current_screen_x = 7
   .label current_screen_line = 3
   .label current_screen_line_24 = 5
+  .label current_screen_line_46 = 5
   .label current_screen_line_47 = 5
   .label current_screen_line_48 = 5
-  .label current_screen_line_49 = 5
 .segment Code
 main: {
     rts
@@ -322,9 +322,9 @@ reset: {
     sta.z current_screen_line+1
     jsr print_newline
     lda.z current_screen_line
-    sta.z current_screen_line_48
+    sta.z current_screen_line_47
     lda.z current_screen_line+1
-    sta.z current_screen_line_48+1
+    sta.z current_screen_line_47+1
     lda #0
     sta.z current_screen_x
     lda #<M2
@@ -338,49 +338,36 @@ reset: {
     jmp b1
 }
 test_memory: {
-    .label p = $c
-    .label mem_start = $a
+    .const mem_end = $800
+    .label p = $a
     .label value = 2
     lda #<0
     sta.z p
     sta.z p+1
+    lda #<mem_end
+    sta.z p
+    lda #>mem_end
+    sta.z p+1
+    lda #0
     sta.z current_screen_x
-    lda #<$800
-    sta.z mem_start
-    lda #>$800
-    sta.z mem_start+1
   b1:
-    lda.z mem_start+1
-    cmp #>$7fff
-    bcc b4
-    bne !+
-    lda.z mem_start
-    cmp #<$7fff
-    bcc b4
-  !:
-    rts
-  b4:
     lda #0
     sta.z value
   b2:
     lda.z value
     cmp #$ff
     bcc b3
-    inc.z mem_start
-    bne !+
-    inc.z mem_start+1
-  !:
     jmp b1
   b3:
     lda.z value
     ldy #0
     sta (p),y
     cmp (p),y
-    beq b5
+    beq b4
     lda.z current_screen_line
-    sta.z current_screen_line_49
+    sta.z current_screen_line_48
     lda.z current_screen_line+1
-    sta.z current_screen_line_49+1
+    sta.z current_screen_line_48+1
     lda #<message
     sta.z print_to_screen.message
     lda #>message
@@ -394,7 +381,7 @@ test_memory: {
     jsr print_newline
     lda #0
     sta.z current_screen_x
-  b5:
+  b4:
     inc.z value
     jmp b2
   .segment Data
@@ -414,8 +401,8 @@ print_newline: {
 }
 // print_hex(word zeropage(8) value)
 print_hex: {
-    .label _3 = $e
-    .label _6 = $10
+    .label _3 = $c
+    .label _6 = $e
     .label value = 8
     ldx #0
   b1:
@@ -424,9 +411,9 @@ print_hex: {
     lda #0
     sta hex+4
     lda.z current_screen_line
-    sta.z current_screen_line_47
+    sta.z current_screen_line_46
     lda.z current_screen_line+1
-    sta.z current_screen_line_47+1
+    sta.z current_screen_line_46+1
     lda #<hex
     sta.z print_to_screen.message
     lda #>hex
@@ -515,11 +502,11 @@ print_to_screen: {
     jmp b1
 }
 // Copies the character c (an unsigned char) to the first num characters of the object pointed to by the argument str.
-// memset(void* zeropage($e) str, byte register(X) c, word zeropage($a) num)
+// memset(void* zeropage($e) str, byte register(X) c, word zeropage($c) num)
 memset: {
-    .label end = $a
+    .label end = $c
     .label dst = $e
-    .label num = $a
+    .label num = $c
     .label str = $e
     lda.z num
     bne !+
