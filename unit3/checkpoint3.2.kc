@@ -56,7 +56,7 @@ void test_memory(){
 
 	for(char value =0; value<255; value++){
 		*p = value;
-		if(*p=value){
+		if(*p!=value){
 		
 			print_to_screen("the value is $");
                         print_hex((unsigned short)p);			

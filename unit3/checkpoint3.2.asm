@@ -375,8 +375,6 @@ test_memory: {
     lda.z value
     ldy #0
     sta (p),y
-    sta (p),y
-    tya
     cmp (p),y
     beq b5
     lda.z current_screen_line
