@@ -56,8 +56,8 @@ al C:8277 .syscall36
 al C:8273 .syscall37
 al C:827f .syscall34
 al C:827b .syscall35
-al C:83d3 .print_newline
-al C:83df .print_hex
+al C:83db .print_newline
+al C:83e7 .print_hex
 al C:8243 .syscall49
 al C:8482 .breturn
 al C:c .p
@@ -108,4 +108,3 @@ al C:5 .current_screen_line_26
 al C:d800 .COLS
 al C:8 .message__0
 al C:8491 .message__1
-al C:800 .mem_end

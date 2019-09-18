@@ -61,7 +61,7 @@ break;
 			}
 else{
 			print_to_screen("the value is $");
-                        print_hex(mem_end);			
+                        print_hex((unsigned short)p);			
                         print_newline();		
 			}
 
