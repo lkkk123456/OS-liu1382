@@ -57,17 +57,15 @@ void test_memory(){
 	for(char value =0; value<255; value++){
 		*p = value;
 		if(*p!=value){
-break;
-			}
-else{
+		
 			print_to_screen("the value is $");
                         print_hex((unsigned short)p);			
                         print_newline();		
-			}
+		}
 
-}
+	}
          
-}
+	}
 
 print_to_screen("the value is $");
 print_hex(mem_start);
