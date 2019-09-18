@@ -365,9 +365,9 @@ test_memory: {
     bcc b2
   !:
     lda.z current_screen_line
-    sta.z current_screen_line_57
+    sta.z current_screen_line_56
     lda.z current_screen_line+1
-    sta.z current_screen_line_57+1
+    sta.z current_screen_line_56+1
     lda #<message
     sta.z print_to_screen.message
     lda #>message
@@ -383,9 +383,9 @@ test_memory: {
     sta.z current_screen_line_61+1
     jsr print_hex
     lda.z current_screen_line
-    sta.z current_screen_line_56
+    sta.z current_screen_line_55
     lda.z current_screen_line+1
-    sta.z current_screen_line_56+1
+    sta.z current_screen_line_55+1
     lda #<message
     sta.z print_to_screen.message
     lda #>message
@@ -418,12 +418,17 @@ test_memory: {
     lda.z value
     ldy #0
     sta (p),y
-    cmp (p),y
-    beq b6
+    lda (p),y
+    cmp.z value
+    bne b6
+  b7:
+    inc.z value
+    jmp b3
+  b6:
     lda.z current_screen_line
-    sta.z current_screen_line_55
+    sta.z current_screen_line_57
     lda.z current_screen_line+1
-    sta.z current_screen_line_55+1
+    sta.z current_screen_line_57+1
     lda #<message
     sta.z print_to_screen.message
     lda #>message
@@ -441,9 +446,7 @@ test_memory: {
     jsr print_newline
     lda #0
     sta.z current_screen_x
-  b6:
-    inc.z value
-    jmp b3
+    jmp b7
   .segment Data
     message: .text "the value is $"
     .byte 0
