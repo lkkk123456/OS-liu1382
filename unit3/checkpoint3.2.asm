@@ -12,11 +12,11 @@
   .const JMP = $4c
   .const NOP = $ea
   .label current_screen_x = 7
-  .label current_screen_line = 3
-  .label current_screen_line_24 = 5
-  .label current_screen_line_48 = 5
-  .label current_screen_line_49 = 5
+  .label current_screen_line = 2
+  .label current_screen_line_26 = 5
   .label current_screen_line_50 = 5
+  .label current_screen_line_51 = 5
+  .label current_screen_line_52 = 5
 .segment Code
 main: {
     rts
@@ -308,9 +308,9 @@ reset: {
     lda #0
     sta.z current_screen_x
     lda #<$400
-    sta.z current_screen_line_24
+    sta.z current_screen_line_26
     lda #>$400
-    sta.z current_screen_line_24+1
+    sta.z current_screen_line_26+1
     lda #<M
     sta.z print_to_screen.message
     lda #>M
@@ -322,9 +322,9 @@ reset: {
     sta.z current_screen_line+1
     jsr print_newline
     lda.z current_screen_line
-    sta.z current_screen_line_49
+    sta.z current_screen_line_51
     lda.z current_screen_line+1
-    sta.z current_screen_line_49+1
+    sta.z current_screen_line_51+1
     lda #0
     sta.z current_screen_x
     lda #<M2
@@ -334,13 +334,24 @@ reset: {
     jsr print_to_screen
     jsr print_newline
     jsr test_memory
+    jsr print_newline
   b1:
     jmp b1
+}
+print_newline: {
+    lda #$28
+    clc
+    adc.z current_screen_line
+    sta.z current_screen_line
+    bcc !+
+    inc.z current_screen_line+1
+  !:
+    rts
 }
 test_memory: {
     .label mem_end = $800
     .label p = $a
-    .label value = 2
+    .label value = 4
     lda #<0
     sta.z p
     sta.z p+1
@@ -365,9 +376,9 @@ test_memory: {
     cmp (p),y
     beq b4
     lda.z current_screen_line
-    sta.z current_screen_line_50
+    sta.z current_screen_line_52
     lda.z current_screen_line+1
-    sta.z current_screen_line_50+1
+    sta.z current_screen_line_52+1
     lda #<message
     sta.z print_to_screen.message
     lda #>message
@@ -385,16 +396,6 @@ test_memory: {
     .byte 0
 }
 .segment Code
-print_newline: {
-    lda #$28
-    clc
-    adc.z current_screen_line
-    sta.z current_screen_line
-    bcc !+
-    inc.z current_screen_line+1
-  !:
-    rts
-}
 // print_hex(word zeropage(8) value)
 print_hex: {
     .label _3 = $c
@@ -411,9 +412,9 @@ print_hex: {
     lda #0
     sta hex+4
     lda.z current_screen_line
-    sta.z current_screen_line_48
+    sta.z current_screen_line_50
     lda.z current_screen_line+1
-    sta.z current_screen_line_48+1
+    sta.z current_screen_line_50+1
     lda #<hex
     sta.z print_to_screen.message
     lda #>hex
@@ -493,7 +494,7 @@ print_to_screen: {
     ldy #0
     lda (message),y
     ldy.z current_screen_x
-    sta (current_screen_line_24),y
+    sta (current_screen_line_26),y
     inc.z message
     bne !+
     inc.z message+1
