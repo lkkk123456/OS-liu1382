@@ -387,32 +387,31 @@ print_to_screen: {
     jmp b1
 }
 test_memory: {
-    .label mem_end = $800
+    .const mem_end = $800
     .label p = $a
     .label value = 7
     lda #<0
     sta.z p
     sta.z p+1
+    sta.z current_screen_x
+  b2:
     lda #<mem_end
     sta.z p
     lda #>mem_end
     sta.z p+1
     lda #0
-    sta.z current_screen_x
-  b1:
-    lda #0
     sta.z value
-  b2:
+  b3:
     lda.z value
     cmp #$ff
-    bcc b3
-    jmp b1
-  b3:
+    bcc b4
+    jmp b2
+  b4:
     lda.z value
     ldy #0
     sta (p),y
     cmp (p),y
-    beq b4
+    beq b5
     lda.z current_screen_line
     sta.z current_screen_line_56
     lda.z current_screen_line+1
@@ -422,13 +421,19 @@ test_memory: {
     lda #>message
     sta.z print_to_screen.message+1
     jsr print_to_screen
+    ldy #0
+    lda (p),y
+    sta.z print_hex.value
+    iny
+    lda #0
+    sta.z print_hex.value+1
     jsr print_hex
     jsr print_newline
     lda #0
     sta.z current_screen_x
-  b4:
+  b5:
     inc.z value
-    jmp b2
+    jmp b3
   .segment Data
     message: .text "the value is $"
     .byte 0
@@ -439,10 +444,6 @@ print_hex: {
     .label _3 = $c
     .label _6 = $e
     .label value = 8
-    lda #<test_memory.mem_end
-    sta.z value
-    lda #>test_memory.mem_end
-    sta.z value+1
     ldx #0
   b1:
     cpx #4
