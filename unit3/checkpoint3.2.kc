@@ -98,7 +98,8 @@ print_newline();
 print_to_screen(M2);
 print_newline();
 test_memory();
-print_newline();
+print_to_screen("jjjjjjjjjjjjjjjj")
+
 
 while(true) continue;
 exit_hypervisor();
