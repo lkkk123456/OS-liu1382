@@ -118,6 +118,7 @@ print_newline();
 print_to_screen(M2);
 print_newline();
 test_memory();
+print_newline();
 
 while(true) continue;
 exit_hypervisor();
