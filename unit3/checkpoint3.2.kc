@@ -50,8 +50,8 @@ void test_memory(){
 	unsigned short mem_start = $0800;
 	unsigned short mem_end = $0800;
 	volatile unsigned char *p;
-
-	for(mem_start=$0800; mem_start<$7FFF; mem_start++){
+        p = mem_end;
+	for(mem_start=$0800; mem_end<$7FFF; mem_start++){
 
 
 	for(char value =0; value<255; value++){
