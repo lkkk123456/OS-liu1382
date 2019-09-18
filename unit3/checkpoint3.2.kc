@@ -62,19 +62,13 @@ void test_memory(){
                         print_hex((unsigned short)p);			
                         print_newline();		
 		}
-else{
-continue;
-}
+
 	}
          
 	}
 
 
-print_to_screen("the value is $");
-print_hex(mem_start);
-print_to_screen("the value is $");
-print_hex(mem_end);
-print_newline();
+
 }
 void reset() {
 *VIC_MEMORY = 0x14;
