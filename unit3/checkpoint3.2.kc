@@ -33,7 +33,7 @@ current_screen_line += 40;
 current_screen_x= 0;
 }
 
-void print_hex(unsigned short value)
+void print_hex()
 {
 char[5] hex;
 unsigned char i;
