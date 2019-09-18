@@ -13,10 +13,15 @@
   .const NOP = $ea
   .label current_screen_x = 7
   .label current_screen_line = 3
-  .label current_screen_line_24 = 5
-  .label current_screen_line_46 = 5
-  .label current_screen_line_47 = 5
-  .label current_screen_line_48 = 5
+  .label current_screen_line_26 = 5
+  .label current_screen_line_42 = 5
+  .label current_screen_line_54 = 5
+  .label current_screen_line_55 = 5
+  .label current_screen_line_56 = 5
+  .label current_screen_line_57 = 5
+  .label current_screen_line_61 = 5
+  .label current_screen_line_62 = 5
+  .label current_screen_line_63 = 5
 .segment Code
 main: {
     rts
@@ -308,9 +313,9 @@ reset: {
     lda #0
     sta.z current_screen_x
     lda #<$400
-    sta.z current_screen_line_24
+    sta.z current_screen_line_26
     lda #>$400
-    sta.z current_screen_line_24+1
+    sta.z current_screen_line_26+1
     lda #<M
     sta.z print_to_screen.message
     lda #>M
@@ -322,9 +327,9 @@ reset: {
     sta.z current_screen_line+1
     jsr print_newline
     lda.z current_screen_line
-    sta.z current_screen_line_47
+    sta.z current_screen_line_54
     lda.z current_screen_line+1
-    sta.z current_screen_line_47+1
+    sta.z current_screen_line_54+1
     lda #0
     sta.z current_screen_x
     lda #<M2
@@ -338,18 +343,13 @@ reset: {
     jmp b1
 }
 test_memory: {
-    .label mem_end = $800
+    .const mem_end = $800
     .label p = $c
-    .label mem_start = $a
     .label value = 2
+    .label mem_start = $a
     lda #<0
     sta.z p
     sta.z p+1
-    lda #<mem_end
-    sta.z p
-    lda #>mem_end
-    sta.z p+1
-    lda #0
     sta.z current_screen_x
     lda #<$800
     sta.z mem_start
@@ -358,47 +358,93 @@ test_memory: {
   b1:
     lda.z mem_start+1
     cmp #>$7fff
-    bcc b4
+    bcc b2
     bne !+
     lda.z mem_start
     cmp #<$7fff
-    bcc b4
+    bcc b2
   !:
-    rts
-  b4:
-    lda #0
-    sta.z value
-  b2:
-    lda.z value
-    cmp #$ff
-    bcc b3
-    inc.z mem_start
-    bne !+
-    inc.z mem_start+1
-  !:
-    jmp b1
-  b3:
-    lda.z value
-    ldy #0
-    sta (p),y
-    cmp (p),y
-    beq b5
     lda.z current_screen_line
-    sta.z current_screen_line_48
+    sta.z current_screen_line_57
     lda.z current_screen_line+1
-    sta.z current_screen_line_48+1
+    sta.z current_screen_line_57+1
     lda #<message
     sta.z print_to_screen.message
     lda #>message
     sta.z print_to_screen.message+1
     jsr print_to_screen
+    lda.z mem_start
+    sta.z print_hex.value
+    lda.z mem_start+1
+    sta.z print_hex.value+1
+    lda.z current_screen_line
+    sta.z current_screen_line_61
+    lda.z current_screen_line+1
+    sta.z current_screen_line_61+1
+    jsr print_hex
+    lda.z current_screen_line
+    sta.z current_screen_line_56
+    lda.z current_screen_line+1
+    sta.z current_screen_line_56+1
+    lda #<message
+    sta.z print_to_screen.message
+    lda #>message
+    sta.z print_to_screen.message+1
+    jsr print_to_screen
+    lda.z current_screen_line
+    sta.z current_screen_line_62
+    lda.z current_screen_line+1
+    sta.z current_screen_line_62+1
+    lda #<mem_end
+    sta.z print_hex.value
+    lda #>mem_end
+    sta.z print_hex.value+1
     jsr print_hex
     jsr print_newline
+    rts
+  b2:
+    lda #0
+    sta.z value
+  b3:
+    lda.z value
+    cmp #$ff
+    bcc b4
+  b6:
+    inc.z mem_start
+    bne !+
+    inc.z mem_start+1
+  !:
+    jmp b1
+  b4:
+    lda.z value
+    ldy #0
+    sta (p),y
+    lda (p),y
+    cmp.z value
+    bne b6
+    lda.z current_screen_line
+    sta.z current_screen_line_55
+    lda.z current_screen_line+1
+    sta.z current_screen_line_55+1
+    lda #<message
+    sta.z print_to_screen.message
+    lda #>message
+    sta.z print_to_screen.message+1
+    jsr print_to_screen
+    lda.z p
+    sta.z print_hex.value
+    lda.z p+1
+    sta.z print_hex.value+1
+    lda.z current_screen_line
+    sta.z current_screen_line_63
+    lda.z current_screen_line+1
+    sta.z current_screen_line_63+1
+    jsr print_hex
+    jsr print_newline
+    inc.z value
     lda #0
     sta.z current_screen_x
-  b5:
-    inc.z value
-    jmp b2
+    jmp b3
   .segment Data
     message: .text "the value is $"
     .byte 0
@@ -418,20 +464,12 @@ print_newline: {
 print_hex: {
     .label _4 = $e
     .label value = 8
-    lda #<test_memory.mem_end
-    sta.z value
-    lda #>test_memory.mem_end
-    sta.z value+1
     ldx #0
   b1:
     cpx #4
     bcc b2
     lda #0
     sta hex+4
-    lda.z current_screen_line
-    sta.z current_screen_line_46
-    lda.z current_screen_line+1
-    sta.z current_screen_line_46+1
     lda #<hex
     sta.z print_to_screen.message
     lda #>hex
@@ -492,7 +530,7 @@ print_to_screen: {
     ldy #0
     lda (message),y
     ldy.z current_screen_x
-    sta (current_screen_line_24),y
+    sta (current_screen_line_26),y
     inc.z message
     bne !+
     inc.z message+1

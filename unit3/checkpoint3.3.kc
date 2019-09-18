@@ -47,7 +47,12 @@ print_to_screen(hex);
 }
 
 void detect_device(){
-     
+     char *out;
+     for(unsigned short i=$D000; i<=$DFF0; i++){
+detect_vicii(i);
+*out = detect_vicii(i);
+if(){
+}
 }
 
 char detect_vicii(unsigned short value){
