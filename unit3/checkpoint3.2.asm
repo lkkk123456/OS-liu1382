@@ -350,6 +350,11 @@ test_memory: {
     lda #<0
     sta.z p
     sta.z p+1
+    lda #<mem_end
+    sta.z p
+    lda #>mem_end
+    sta.z p+1
+    lda #0
     sta.z current_screen_x
     lda #<$800
     sta.z mem_start
@@ -431,14 +436,14 @@ test_memory: {
     lda #>message
     sta.z print_to_screen.message+1
     jsr print_to_screen
-    lda.z p
-    sta.z print_hex.value
-    lda.z p+1
-    sta.z print_hex.value+1
     lda.z current_screen_line
     sta.z current_screen_line_63
     lda.z current_screen_line+1
     sta.z current_screen_line_63+1
+    lda #<mem_end
+    sta.z print_hex.value
+    lda #>mem_end
+    sta.z print_hex.value+1
     jsr print_hex
     jsr print_newline
     inc.z value
