@@ -1,0 +1,353 @@
+import"string"
+#pragma link("mega65hyper.ld")
+const char* RASTER = 0xd012;
+const char* VIC_MEMORY = 0xd018;
+const char* SCREEN = 0x0400;
+const char* BGCOL =0xd021;
+const char* COLS = 0xd800;
+const char BLACK = 0;
+const char WHITE = 1;
+
+char[] MESSAGE = "checkpoint 2.3 by liu1382";
+
+void main(){
+*VIC_MEMORY = 0x14;
+memset(SCREEN,' ',40*25);
+memset(COLS,WHITE,40*25);
+char* sc = SCREEN+40;
+char* msg = MESSAGE;
+while(*msg){
+*sc++ = *msg++;
+}
+while(true){
+if(*RASTER==54 || *RASTER==66){
+*BGCOL = WHITE;
+}else{
+*BGCOL = BLACK;
+}
+}
+}
+void syscall1(){
+*(SCREEN+79) = '>';
+}
+
+void syscall2(){
+*(SCREEN+78) = '<';
+}
+
+void syscall3(){
+*(SCREEN+79) = '>';
+}
+
+void syscall4(){
+*(SCREEN+78) = '<';
+}
+
+void syscall5(){
+*(SCREEN+79) = '>';
+}
+
+void syscall6(){
+*(SCREEN+78) = '<';
+}
+void syscall7(){
+*(SCREEN+79) = '>';
+}
+
+void syscall8(){
+*(SCREEN+78) = '<';
+}
+void syscall9(){
+*(SCREEN+79) = '>';
+}
+
+void syscall10(){
+*(SCREEN+78) = '<';
+}
+void syscall11(){
+*(SCREEN+79) = '>';
+}
+
+void syscall12(){
+*(SCREEN+78) = '<';
+}
+
+void syscall13(){
+*(SCREEN+79) = '>';
+}
+
+void syscall14(){
+*(SCREEN+78) = '<';
+}
+
+void syscall15(){
+*(SCREEN+79) = '>';
+}
+
+void syscall16(){
+*(SCREEN+78) = '<';
+}
+
+void syscall17(){
+*(SCREEN+79) = '>';
+}
+
+void securentr(){
+*(SCREEN+78) = '<';
+}
+void securexit(){
+*(SCREEN+79) = '>';
+}
+
+void syscall20(){
+*(SCREEN+78) = '<';
+}
+void syscall21(){
+*(SCREEN+79) = '>';
+}
+
+void syscall22(){
+*(SCREEN+78) = '<';
+}
+void syscall23(){
+*(SCREEN+79) = '>';
+}
+
+void syscall24(){
+*(SCREEN+78) = '<';
+}
+
+void syscall25(){
+*(SCREEN+79) = '>';
+}
+
+void syscall26(){
+*(SCREEN+78) = '<';
+}
+
+void syscall27(){
+*(SCREEN+79) = '>';
+}
+
+void syscall28(){
+*(SCREEN+78) = '<';
+}
+
+void syscall29(){
+*(SCREEN+79) = '>';
+}
+
+void syscall30(){
+*(SCREEN+78) = '<';
+}
+void syscall31(){
+*(SCREEN+79) = '>';
+}
+
+void syscall32(){
+*(SCREEN+78) = '<';
+}
+void syscall33(){
+*(SCREEN+79) = '>';
+}
+
+void syscall34(){
+*(SCREEN+78) = '<';
+}
+void syscall35(){
+*(SCREEN+79) = '>';
+}
+
+void syscall36(){
+*(SCREEN+78) = '<';
+}
+
+void syscall37(){
+*(SCREEN+79) = '>';
+}
+
+void syscall38(){
+*(SCREEN+78) = '<';
+}
+
+void syscall39(){
+*(SCREEN+79) = '>';
+}
+
+void syscall40(){
+*(SCREEN+78) = '<';
+}
+
+void syscall41(){
+*(SCREEN+79) = '>';
+}
+
+void syscall42(){
+*(SCREEN+78) = '<';
+}
+void syscall43(){
+*(SCREEN+79) = '>';
+}
+
+void syscall44(){
+*(SCREEN+78) = '<';
+}
+void syscall45(){
+*(SCREEN+79) = '>';
+}
+
+void syscall46(){
+*(SCREEN+78) = '<';
+}
+void syscall47(){
+*(SCREEN+79) = '>';
+}
+
+void syscall48(){
+*(SCREEN+78) = '<';
+}
+
+
+void syscall49(){
+*(SCREEN+78) = '<';
+}
+
+void syscall50(){
+*(SCREEN+79) = '>';
+}
+
+void syscall51(){
+*(SCREEN+78) = '<';
+}
+
+void syscall52(){
+*(SCREEN+79) = '>';
+}
+
+void syscall53(){
+*(SCREEN+78) = '<';
+}
+
+void syscall54(){
+*(SCREEN+79) = '>';
+}
+
+void syscall55(){
+*(SCREEN+78) = '<';
+}
+void syscall56(){
+*(SCREEN+79) = '>';
+}
+
+void syscall57(){
+*(SCREEN+78) = '<';
+}
+void syscall58(){
+*(SCREEN+79) = '>';
+}
+
+void syscall59(){
+*(SCREEN+78) = '<';
+}
+void syscall60(){
+*(SCREEN+79) = '>';
+}
+
+void syscall61(){
+*(SCREEN+78) = '<';
+}
+
+void syscall62(){
+*(SCREEN+78) = '<';
+}
+
+void syscall63(){
+*(SCREEN+79) = '>';
+}
+
+void syscall64(){
+*(SCREEN+78) = '<';
+}
+
+#pragma data_seg(Syscall)
+
+struct Syscall{
+char xjmp;
+void()* Syscall;
+char xnop;
+};
+
+const char JMP = 0x4c;
+const char NOP = 0xea;
+
+export struct Syscall[] SYSCALLS={
+{JMP, &syscall00, NOP},
+{JMP, &syscall01, NOP},
+{JMP, &syscall02, NOP},
+{JMP, &syscall03, NOP},
+{JMP, &syscall04, NOP},
+{JMP, &syscall05, NOP},
+{JMP, &syscall06, NOP},
+{JMP, &syscall07, NOP},
+{JMP, &syscall08, NOP},
+{JMP, &syscall09, NOP},
+{JMP, &syscall0a, NOP},
+{JMP, &syscall0b, NOP},
+{JMP, &syscall0c, NOP},
+{JMP, &syscall0d, NOP},
+{JMP, &syscall0e, NOP},
+{JMP, &syscall0f, NOP},
+{JMP, &syscall10, NOP},
+{JMP, &securentr, NOP},
+{JMP, &securexit, NOP},
+{JMP, &syscall13, NOP},
+{JMP, &syscall14, NOP},
+{JMP, &syscall15, NOP},
+{JMP, &syscall16, NOP},
+{JMP, &syscall17, NOP},
+{JMP, &syscall18, NOP},
+{JMP, &syscall19, NOP},
+{JMP, &syscall1a, NOP},
+{JMP, &syscall1b, NOP},
+{JMP, &syscall1c, NOP},
+{JMP, &syscall1d, NOP},
+{JMP, &syscall1e, NOP},
+{JMP, &syscall1f, NOP},
+{JMP, &syscall20, NOP},
+{JMP, &syscall21, NOP},
+{JMP, &syscall22, NOP},
+{JMP, &syscall23, NOP},
+{JMP, &syscall24, NOP},
+{JMP, &syscall25, NOP},
+{JMP, &syscall26, NOP},
+{JMP, &syscall27, NOP},
+{JMP, &syscall28, NOP},
+{JMP, &syscall29, NOP},
+{JMP, &syscall2a, NOP},
+{JMP, &syscall2b, NOP},
+{JMP, &syscall2c, NOP},
+{JMP, &syscall2d, NOP},
+{JMP, &syscall2e, NOP},
+{JMP, &syscall2f, NOP},
+{JMP, &syscall30, NOP},
+{JMP, &syscall31, NOP},
+{JMP, &syscall32, NOP},
+{JMP, &syscall33, NOP},
+{JMP, &syscall34, NOP},
+{JMP, &syscall35, NOP},
+{JMP, &syscall36, NOP},
+{JMP, &syscall37, NOP},
+{JMP, &syscall38, NOP},
+{JMP, &syscall39, NOP},
+{JMP, &syscall3a, NOP},
+{JMP, &syscall3b, NOP},
+{JMP, &syscall3c, NOP},
+{JMP, &syscall3d, NOP},
+{JMP, &syscall3e, NOP},
+{JMP, &syscall3f, NOP}
+};
+
+export align(0x100) struct Syscall[] SYSCALL_RESET = {
+{JMP, &main, NOP}
+};
+
