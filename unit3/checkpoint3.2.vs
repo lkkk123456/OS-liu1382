@@ -11,7 +11,7 @@ al C:8494 .b2__3
 al C:83a5 .b3__0
 al C:84a1 .b3__1
 al C:8443 .b4
-al C:83d4 .b5__0
+al C:83cc .b5__0
 al C:842f .b5__1
 al C:400 .SCREEN
 al C:82df .syscall10
@@ -57,8 +57,8 @@ al C:8277 .syscall36
 al C:8273 .syscall37
 al C:827f .syscall34
 al C:827b .syscall35
-al C:83d9 .print_newline
-al C:83e5 .print_hex
+al C:83d1 .print_newline
+al C:83dd .print_hex
 al C:8243 .syscall49
 al C:84a0 .breturn
 al C:c .p
@@ -110,3 +110,4 @@ al C:5 .current_screen_line_26
 al C:d800 .COLS
 al C:8 .message__0
 al C:84af .message__1
+al C:800 .mem_end

@@ -338,7 +338,7 @@ reset: {
     jmp b1
 }
 test_memory: {
-    .const mem_end = $800
+    .label mem_end = $800
     .label p = $c
     .label mem_start = $a
     .label value = 2
@@ -382,10 +382,6 @@ test_memory: {
     lda #>message
     sta.z print_to_screen.message+1
     jsr print_to_screen
-    lda.z p
-    sta.z print_hex.value
-    lda.z p+1
-    sta.z print_hex.value+1
     jsr print_hex
     jsr print_newline
     lda #0
@@ -413,6 +409,10 @@ print_hex: {
     .label _3 = $e
     .label _6 = $10
     .label value = 8
+    lda #<test_memory.mem_end
+    sta.z value
+    lda #>test_memory.mem_end
+    sta.z value+1
     ldx #0
   b1:
     cpx #4

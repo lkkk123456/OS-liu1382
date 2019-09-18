@@ -60,7 +60,7 @@ void test_memory(){
 		if(*p!=value){
 		
 			print_to_screen("the value is $");
-                        print_hex((unsigned short)p);			
+                        print_hex(mem_end);			
                         print_newline();		
 		}
 
