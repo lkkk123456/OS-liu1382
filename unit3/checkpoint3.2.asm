@@ -340,8 +340,8 @@ reset: {
 test_memory: {
     .label mem_end = $800
     .label p = $c
-    .label value = 2
     .label mem_start = $a
+    .label value = 2
     lda #<0
     sta.z p
     sta.z p+1
@@ -372,7 +372,6 @@ test_memory: {
     lda.z value
     cmp #$ff
     bcc b3
-  b5:
     inc.z mem_start
     bne !+
     inc.z mem_start+1
@@ -382,9 +381,8 @@ test_memory: {
     lda.z value
     ldy #0
     sta (p),y
-    lda (p),y
-    cmp.z value
-    bne b5
+    cmp (p),y
+    beq b5
     lda.z current_screen_line
     sta.z current_screen_line_48
     lda.z current_screen_line+1
@@ -396,9 +394,10 @@ test_memory: {
     jsr print_to_screen
     jsr print_hex
     jsr print_newline
-    inc.z value
     lda #0
     sta.z current_screen_x
+  b5:
+    inc.z value
     jmp b2
   .segment Data
     message: .text "the value is $"
