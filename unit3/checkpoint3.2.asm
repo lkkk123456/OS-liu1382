@@ -13,11 +13,11 @@
   .const NOP = $ea
   .label current_screen_x = 6
   .label current_screen_line = 2
-  .label current_screen_line_27 = 4
-  .label current_screen_line_51 = 4
-  .label current_screen_line_52 = 4
+  .label current_screen_line_29 = 4
   .label current_screen_line_53 = 4
   .label current_screen_line_54 = 4
+  .label current_screen_line_55 = 4
+  .label current_screen_line_56 = 4
 .segment Code
 main: {
     rts
@@ -309,9 +309,9 @@ reset: {
     lda #0
     sta.z current_screen_x
     lda #<$400
-    sta.z current_screen_line_27
+    sta.z current_screen_line_29
     lda #>$400
-    sta.z current_screen_line_27+1
+    sta.z current_screen_line_29+1
     lda #<M
     sta.z print_to_screen.message
     lda #>M
@@ -323,9 +323,9 @@ reset: {
     sta.z current_screen_line+1
     jsr print_newline
     lda.z current_screen_line
-    sta.z current_screen_line_52
+    sta.z current_screen_line_54
     lda.z current_screen_line+1
-    sta.z current_screen_line_52+1
+    sta.z current_screen_line_54+1
     lda #0
     sta.z current_screen_x
     lda #<M2
@@ -335,10 +335,13 @@ reset: {
     jsr print_to_screen
     jsr print_newline
     jsr test_memory
+    jsr print_newline
     lda.z current_screen_line
-    sta.z current_screen_line_53
+    sta.z current_screen_line_55
     lda.z current_screen_line+1
-    sta.z current_screen_line_53+1
+    sta.z current_screen_line_55+1
+    lda #0
+    sta.z current_screen_x
     lda #<message
     sta.z print_to_screen.message
     lda #>message
@@ -375,7 +378,7 @@ print_to_screen: {
     ldy #0
     lda (message),y
     ldy.z current_screen_x
-    sta (current_screen_line_27),y
+    sta (current_screen_line_29),y
     inc.z message
     bne !+
     inc.z message+1
@@ -411,9 +414,9 @@ test_memory: {
     cmp (p),y
     beq b4
     lda.z current_screen_line
-    sta.z current_screen_line_54
+    sta.z current_screen_line_56
     lda.z current_screen_line+1
-    sta.z current_screen_line_54+1
+    sta.z current_screen_line_56+1
     lda #<message
     sta.z print_to_screen.message
     lda #>message
@@ -447,9 +450,9 @@ print_hex: {
     lda #0
     sta hex+4
     lda.z current_screen_line
-    sta.z current_screen_line_51
+    sta.z current_screen_line_53
     lda.z current_screen_line+1
-    sta.z current_screen_line_51+1
+    sta.z current_screen_line_53+1
     lda #<hex
     sta.z print_to_screen.message
     lda #>hex
