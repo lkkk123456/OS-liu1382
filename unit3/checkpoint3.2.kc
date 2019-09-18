@@ -70,10 +70,7 @@ void test_memory(){
 
 
 			print_to_screen("the value is $");
-                        print_hex(mem_start);
-                        print_to_screen("the value is $");
-                        print_hex(mem_end);			
-                        print_newline();
+                        
 
 }
 void reset() {
