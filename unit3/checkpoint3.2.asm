@@ -350,22 +350,17 @@ test_memory: {
     lda #<0
     sta.z p
     sta.z p+1
-    lda #<mem_end
-    sta.z p
-    lda #>mem_end
-    sta.z p+1
+    sta.z current_screen_x
     lda #<$800
     sta.z mem_start
     lda #>$800
     sta.z mem_start+1
-    lda #0
-    sta.z current_screen_x
   b1:
-    lda.z p+1
+    lda.z mem_start+1
     cmp #>$7fff
     bcc b2
     bne !+
-    lda.z p
+    lda.z mem_start
     cmp #<$7fff
     bcc b2
   !:
