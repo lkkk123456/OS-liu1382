@@ -39,59 +39,72 @@ char[5] hex;
 unsigned char i;
 for(i=0;i<4;i++)
 {
-if(value<0xa000) hex[i]='0'+(char)(value>>12);
+if (value<0xa000) hex[i]='0'+(char)(value>>12);
+else hex[i]= (char)(value>>12)-9;
 value<<=4;
 }
 hex[4]=0;
 print_to_screen(hex);
 }
 
-void detect_device(){
-     char *out;
-     for(unsigned short i=$D000; i<=$DFF0; i++){
+void detect_devices(){
+char *c;
+for(unsigned short i=$D000; i<=$DFF0; i++){
 detect_vicii(i);
-*out = detect_vicii(i);
-if(){
+*c = detect_vicii(i);
+if(*c==1){
+print_to_screen("vicii detected at $");
+print_hex((unsigned short)i);
+break;
+
 }
+}
+print_newline();
+print_to_screen("probing devices finished");
 }
 
-char detect_vicii(unsigned short value){
-volatile unsign char *p;
+char detect_vicii(unsigned short address){
+volatile unsigned char *p;
 unsigned char v1,v2;
-
 unsigned short i;
-v1=p[$12];
-for(i=1;i<1000;i++)contiune;
-v2=p[$12];
-
+p = address;
+v1 = p[$12];
+for(i=1;i<1000;i++)continue;
+v2 = p[$12];
 if(v2>v1){
-print_to_screen("Seem to be a VIC-II here");
+print_to_screen("seems to be a vic-ii here");
+print_newline();
+return 'a';
 }else{
-return 1;
+return 'd';
 }
 }
+
 void test_memory(){
 	unsigned short mem_start = $0800;
 	unsigned short mem_end = $0800;
 	volatile unsigned char *p;
-
-	for(mem_start=$0800; mem_start<$7FFF; mem_start++){
-
-
+        p = mem_end;
+	for(mem_start=$0800; mem_start<$7fff; mem_start++){
 	for(char value =0; value<255; value++){
 		*p = value;
 		if(*p!=value){
-break;
-			}
-else{
+		
 			print_to_screen("the value is $");
                         print_hex((unsigned short)p);			
                         print_newline();		
-			}
+		}
 
-}
+	}
          
-}
+	}
+
+
+			print_to_screen("the value is $");
+                        print_hex((unsigned short)p);			
+                        print_newline();
+                        return;
+
 }
 void reset() {
 *VIC_MEMORY = 0x14;
@@ -117,8 +130,9 @@ print_to_screen(M);
 print_newline();
 print_to_screen(M2);
 print_newline();
-test_memory();
+detect_devices();
 print_newline();
+
 
 while(true) continue;
 exit_hypervisor();
