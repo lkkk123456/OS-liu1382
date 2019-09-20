@@ -47,20 +47,40 @@ hex[4]=0;
 print_to_screen(hex);
 }
 
+void print_hex1(unsigned short value)
+{
+char[5] hex;
+unsigned char g;
+for(g=0;g<4;g++)
+{
+if (value<0xa000) hex[g]='0'+(char)(value>>12);
+else hex[g]= (char)(value>>12)-9;
+value<<=4;
+}
+hex[4]=0;
+print_to_screen(hex);
+}
+
 void detect_devices(){
 char *c;
 char *d;
+unsigned short g;
 for(unsigned short i=$D000; i<=$DFF0; i++){
 detect_vicii(i);
-detect_MOS6256(i);
+detect_MOS6256(g);
 *c = detect_vicii(i);
-*d = detect_MOS6256(i);
+*d = detect_MOS6256(g);
 if(*c==1){
 print_to_screen("vicii detected at $");
 print_hex((unsigned short)i);
+}else if(*d==2){
+print_to_screen("MOS6256 detected at $");
+print_hex1((unsigned short)g);
+}
 break;
 
-}
+
+
 }
 
 print_to_screen("probing devices finished");
@@ -85,10 +105,10 @@ return 'd';
 char detect_MOS6256(unsigned short address){
 volatile unsigned char *p;
 unsigned char v1,v2,v3;
-unsigned short i;
+unsigned short g;
 p = address;
 v1 = p[$09];
-for(i=1;i<1000;i++)continue;
+for(g=1;g<1000;g++)continue;
 v2 = p[$09];
 if(v2>$23){
 print_to_screen("seems to be a MOS6256 here");
