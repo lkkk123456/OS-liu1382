@@ -1,0 +1,7 @@
+import "myabi"
+void main()
+{
+call_syscall02();
+print_string("printed via");
+while(true) contiune;
+}
