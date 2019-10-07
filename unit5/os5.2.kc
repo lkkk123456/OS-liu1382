@@ -18,14 +18,32 @@ const char BLACK = 0;
 const char BLUE = 6;
 const char WHITE = 1;
 
-char[] MESSAGE = "checkpoint 5.2";
+char[] MESSAGE = "checkpoint 5.2 by liu1382";
 
 const unsigned char STATE_NOTRUNNING = $00;
 const unsigned char STATE_RUNNING = $01;
 
 // Process Descriptor Block definition
 struct process_descriptor_block {
- XXX - Copy in your content from os5.1.kc 
+  // Unique identifier for the process
+  unsigned char process_id;
+
+  // Current state of the process
+  unsigned char process_state;
+
+  // Human readable name of the process
+  char* process_name;
+  
+  // Where this process is stored when not running
+  // i.e., where in the $20000-$5FFFF memory range the
+  // process is stored when not running.
+  unsigned long storage_start_address;
+  unsigned long storage_end_address;
+ 
+  // Stored registers and related machine state for this
+  // process (for the $D640-$D67E machine state registers)
+  unsigned char* stored_state;
+  
 };
 
 // Process stored state will live at $C000-$C7FF, with 256 bytes
