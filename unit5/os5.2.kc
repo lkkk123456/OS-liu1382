@@ -145,13 +145,16 @@ void initialise_pdb(unsigned char pdb_number,char *name)
     =(struct process_descriptor_block *)(((unsigned short)stored_pdbs)+(((unsigned short)pdb_number)<<8));
 
   // Setup process ID
-  XXX - Call the function next_free_pid() to get a process ID for the
+ /*- Call the function next_free_pid() to get a process ID for the
   process in this PDB, and store it in p->process_id
+*/
+print_hex((0001)p->process_id);
+
 
   // Setup process name 
   // (32 bytes space for each to fit 16 chars + nul)
   // (we could just use 17 bytes, but kickc can't multiply by 17)
-  p->process_name=process_names+(((short)i)<<5);
+  p->process_name=program1.prg+(((short)i)<<5);
   XXX - copy the string in the array 'name' into the array 'p->process_name'
   XXX - To make your life easier, do something like char *pn=p->process_name
         Then you can just do something along the lines of pn[...]=name[...] 
