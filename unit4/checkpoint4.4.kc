@@ -14,6 +14,7 @@ volatile unsigned char current_screen_x;
 char[] MESSAGE = "checkpoint 4.3 by liu1382";
 char[] M1 = "syscall00 entered";
 char[] M2 = "syscall01 entered";
+
 void main(){
 
 }
@@ -73,6 +74,7 @@ exit_hypervisor();
 }
 
 void syscall02(){
+print_to_screen($0300);
 print_newline();
 exit_hypervisor();
 }
