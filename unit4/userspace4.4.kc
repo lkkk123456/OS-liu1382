@@ -1,7 +1,8 @@
 import "myabi"
 void main()
 {
+
+print_string("printed via print string api");
 call_syscall02();
-print_string("printed via");
 while(true) contiune;
 }
