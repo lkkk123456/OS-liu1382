@@ -6,7 +6,13 @@ void enable_syscalls()
 
 void print_string()
 {
+unsigned char* = $0300;
+char[100] arr = *string;
+for(int i=0; i<255; i++){
+     char[i] = sting;
+     
 
+     }
 }
 
 void call_syscall00()
