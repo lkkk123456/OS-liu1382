@@ -11,7 +11,7 @@ char[500] arr= string;
 for(int i=0; i<255; i++){
      //arr[i] == *string   
      *p = arr[i];
-     //p++;
+     p++;
 
      }
 }
