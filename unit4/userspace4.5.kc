@@ -1,0 +1,10 @@
+import "myabi"
+void main()
+{
+call_syscall03();
+
+print_string("os version is:  ");
+get_os_version(os_version_return);
+while(true) contiune;
+
+}
