@@ -1,3 +1,4 @@
+char[256] os_version_return;
 void enable_syscalls()
 {
 *(unsigned char *)$D02F = $47;
@@ -16,6 +17,20 @@ for(int i=0; i<255; i++){
      }
 }
 
+char * get_os_version()
+{
+char[256] os_version_return ;
+
+char *c = $0300; 
+for(int i=0; i<255; i++){
+
+os_verson_return[i] = *c;
+*c++;
+     }
+return os_version_return;
+}
+
+
 void call_syscall00()
 {
 enable_syscalls();
@@ -32,5 +47,11 @@ void call_syscall02()
 {
 enable_syscalls();
 *(unsigned char *)$D642 = $02;
+asm {nop}
+}
+void call_syscall03()
+{
+enable_syscalls();
+*(unsigned char *)$D643 = $03;
 asm {nop}
 }
