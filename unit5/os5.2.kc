@@ -193,15 +193,18 @@ p->process_state = STATE_NOTRUNNING;
   // Set stored memory area
   // (for now, we just use fixed 8KB steps from $30000-$3FFFF
   // corresponding to the PDB number
-//  XXX - Set p->storage_start_address to the correct start address
+/*
+  XXX - Set p->storage_start_address to the correct start address
   for a process that is in this PDB.
   The correct address is $30000 + (((unsigned dword)pdb_number)*$2000);
+*/
 p->storage_start_address = $30000 + (((unsigned dword)pdb_number)*$2000);
-
+/*
   XXX - Then do the same for the end address of the process
   This gets stored into p->process_end_address and the correct
   address is $31FFF + (((unsigned dword)pdb_number)*$2000);
-
+*/
+p->process_end_address = $31FFF + (((unsigned dword)pdb_number)*$2000);
   // Initialise processor state for standard entry at $080D
   // Everything to zero, except for a few things we will set manually
 
