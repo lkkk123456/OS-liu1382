@@ -169,13 +169,13 @@ void initialise_pdb(unsigned char pdb_number,char *name)
   Call the function next_free_pid() to get a process ID for the
   process in this PDB, and store it in p->process_id
 */
-next_free_pid(p->process_id);
+p->process_id = next_free_pid();
 
 
   // Setup process name 
   // (32 bytes space for each to fit 16 chars + nul)
   // (we could just use 17 bytes, but kickc can't multiply by 17)
-  p->process_name=program1.prg+(((short)i)<<5);
+  p->process_name =PROGRAM1.PRG + (((short)i)<<5);
   /*
         copy the string in the array 'name' into the array 'p->process_name'
   XXX - To make your life easier, do something like char *pn=p->process_name
@@ -206,7 +206,7 @@ p->storage_start_address = $30000 + (((unsigned dword)pdb_number)*$2000);
   This gets stored into p->process_end_address and the correct
   address is $31FFF + (((unsigned dword)pdb_number)*$2000);
 */
-p->process_end_address = $31FFF + (((unsigned dword)pdb_number)*$2000);
+p->storage_end_address = $31FFF + (((unsigned dword)pdb_number)*$2000);
   // Initialise processor state for standard entry at $080D
   // Everything to zero, except for a few things we will set manually
 
