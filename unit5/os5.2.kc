@@ -175,7 +175,7 @@ p->process_id = next_free_pid();
   // Setup process name 
   // (32 bytes space for each to fit 16 chars + nul)
   // (we could just use 17 bytes, but kickc can't multiply by 17)
-  p->process_name =PROGRAM1.PRG + (((short)i)<<5);
+  p->process_name ="PROGRAM1.PRG" + (((short)i)<<5);
   /*
         copy the string in the array 'name' into the array 'p->process_name'
   XXX - To make your life easier, do something like char *pn=p->process_name
@@ -184,9 +184,9 @@ p->process_id = next_free_pid();
         (The arrays are both 17 bytes long)
 */
 char *pn = p->process_name;
-for(int i=0; i<255; i++){
-pn = p->process_name[i];
-pn++;
+for(int i=0; i<17; i++){
+pn[i] = name[i];
+
 }
 
   // Set process state as not running.
