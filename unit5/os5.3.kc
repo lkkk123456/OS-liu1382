@@ -489,25 +489,19 @@ void reset() {
 memset(SCREEN,' ',40*25);
 memset(COLS,WHITE,40*25);
 char* sc = SCREEN+40;
-char* msg = MESSAGE;
+//char* msg = MESSAGE;
  current_screen_line = SCREEN;
     print_newline();
     print_newline();
     print_newline();
    initialise_pdb(0,"program1.prg");
-  print_newline();
 load_program(0);
-  print_newline();
 resume_pdb(0);
   print_newline();
-    describe_pdb(0);
-  print_newline();
+ //   describe_pdb(0);
 
 
-while(*msg){
-*sc++ = *msg++;
-current_screen_x++;
-}
+
 while(true){
 if(*RASTER==54 || *RASTER==66){
 *BGCOL = WHITE;
@@ -518,25 +512,27 @@ if(*RASTER==54 || *RASTER==66){
 exit_hypervisor();
 }
 
-void syscall1(){
-exit_hypervisor();
-}
+//void syscall1(){
+//exit_hypervisor();
+//}
 
 void syscall2(){
 exit_hypervisor();
 }
 
 void syscall3(){
-describe_pdb(running_pdb);
-  print_newline();
+
+ 
 exit_hypervisor();
 }
 
 void syscall4(){
+
 exit_hypervisor();
 }
 
 void syscall5(){
+describe_pdb(running_pdb);
 exit_hypervisor();
 }
 
@@ -786,7 +782,7 @@ exit_hypervisor();
 void reserved(){
 exit_hypervisor();
 }
-void cupkil(){
+void cpukil(){
 exit_hypervisor();
 }
 void undefined_trap(){
@@ -805,7 +801,7 @@ const char JMP = 0x4c;
 const char NOP = 0xea;
 
 export struct Syscall[] SYSCALLS={
-{JMP, &syscall1, NOP},
+//{JMP, &syscall1, NOP},
 {JMP, &syscall2, NOP},
 {JMP, &syscall3, NOP},
 {JMP, &syscall4, NOP},
@@ -872,8 +868,64 @@ export struct Syscall[] SYSCALLS={
 };
 
 export align(0x100) struct Syscall[] SYSCALL_RESET = {
-{JMP, &reset, NOP}
+	{ JMP, &reset, NOP },
+	{ JMP, &pagfault, NOP },
+	{ JMP, &alttabkey, NOP },
+	{ JMP, &vf011rd, NOP },
+	{ JMP, &vf011wr, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &reserved, NOP },
+	{ JMP, &cpukil, NOP }
+
 };
+
+
 
 
 
