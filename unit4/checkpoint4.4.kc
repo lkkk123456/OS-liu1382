@@ -385,7 +385,7 @@ const char JMP = 0x4c;
 const char NOP = 0xea;
 
 export struct Syscall[] SYSCALLS={
-{JMP, &syscall00, NOP},
+//{JMP, &syscall00, NOP},
 {JMP, &syscall01, NOP},
 {JMP, &syscall02, NOP},
 {JMP, &syscall4, NOP},

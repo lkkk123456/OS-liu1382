@@ -512,9 +512,9 @@ if(*RASTER==54 || *RASTER==66){
 exit_hypervisor();
 }
 
-//void syscall1(){
-//exit_hypervisor();
-//}
+void syscall1(){
+exit_hypervisor();
+}
 
 void syscall2(){
 exit_hypervisor();
@@ -527,12 +527,12 @@ exit_hypervisor();
 }
 
 void syscall4(){
-
+describe_pdb(running_pdb);
 exit_hypervisor();
 }
 
 void syscall5(){
-describe_pdb(running_pdb);
+
 exit_hypervisor();
 }
 
@@ -801,7 +801,7 @@ const char JMP = 0x4c;
 const char NOP = 0xea;
 
 export struct Syscall[] SYSCALLS={
-//{JMP, &syscall1, NOP},
+{JMP, &syscall1, NOP},
 {JMP, &syscall2, NOP},
 {JMP, &syscall3, NOP},
 {JMP, &syscall4, NOP},

@@ -74,7 +74,7 @@ v2 = p[$12];
 if(v2>v1){
 print_to_screen("seems to be a vic-ii here");
 print_newline();
-return 'a';
+return '1';
 }else{
 return 'd';
 }

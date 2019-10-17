@@ -5,12 +5,9 @@
 .segmentdef Data [startAfter="Code", min=$8200, max=$bdff]
 .segmentdef Stack [min=$be00, max=$beff, fill]
 .segmentdef Zeropage [min=$bf00, max=$bfff, fill]
-  .label RASTER = $d012
   .label VIC_MEMORY = $d018
   .label SCREEN = $400
-  .label BGCOL = $d021
   .label COLS = $d800
-  .const BLACK = 0
   .const WHITE = 1
   .const JMP = $4c
   .const NOP = $ea
@@ -51,26 +48,15 @@ reset: {
     sta.z msg
     lda #>MESSAGE
     sta.z msg+1
-  b1:
+  __b1:
     ldy #0
     lda (msg),y
     cmp #0
-    bne b2
-  b3:
-    lda #$36
-    cmp RASTER
-    beq b4
-    lda #$42
-    cmp RASTER
-    beq b4
-    lda #BLACK
-    sta BGCOL
-    jmp b3
-  b4:
-    lda #WHITE
-    sta BGCOL
-    jmp b3
-  b2:
+    bne __b2
+    jsr start_simple_program
+    jsr exit_hypervisor
+    rts
+  __b2:
     ldy #0
     lda (msg),y
     sta (sc),y
@@ -82,7 +68,54 @@ reset: {
     bne !+
     inc.z msg+1
   !:
-    jmp b1
+    jmp __b1
+}
+exit_hypervisor: {
+    lda #1
+    sta $d67f
+    rts
+}
+start_simple_program: {
+    lda #<$80d
+    sta $d648
+    lda #>$80d
+    sta $d648+1
+    lda #$80
+    sta $300
+    lda #0
+    sta $301
+    lda #$81
+    sta $302
+    lda #0
+    sta $303
+    sta $304
+    sta $305
+    sta $306
+    lda #$60
+    sta $307
+    lda #2
+    sta $308
+    lda #0
+    sta $309
+    lda #2
+    sta $30a
+    lda #1
+    sta $30b
+    lda #8
+    sta $30c
+    lda #0
+    sta $30d
+    sta $30e
+    sta $30f
+    lda #$60
+    sta $310
+    lda #3
+    sta $d701
+    lda #0
+    sta $d702
+    sta $d705
+    jsr exit_hypervisor
+    rts
 }
 // Copies the character c (an unsigned char) to the first num characters of the object pointed to by the argument str.
 // memset(void* zeropage(4) str, byte register(X) c, word zeropage(2) num)
@@ -94,7 +127,7 @@ memset: {
     lda.z num
     bne !+
     lda.z num+1
-    beq breturn
+    beq __breturn
   !:
     lda.z end
     clc
@@ -103,16 +136,16 @@ memset: {
     lda.z end+1
     adc.z str+1
     sta.z end+1
-  b2:
+  __b2:
     lda.z dst+1
     cmp.z end+1
-    bne b3
+    bne __b3
     lda.z dst
     cmp.z end
-    bne b3
-  breturn:
+    bne __b3
+  __breturn:
     rts
-  b3:
+  __b3:
     txa
     ldy #0
     sta (dst),y
@@ -120,15 +153,10 @@ memset: {
     bne !+
     inc.z dst+1
   !:
-    jmp b2
+    jmp __b2
 }
 syscall64: {
     jsr exit_hypervisor
-    rts
-}
-exit_hypervisor: {
-    lda #1
-    sta $d67f
     rts
 }
 syscall63: {
@@ -384,204 +412,139 @@ syscall1: {
     rts
 }
 .segment Data
-  MESSAGE: .text "checkpoint 2.3 by liu1382"
+  MESSAGE: .text "checkpoint 4.1 by liu1382"
   .byte 0
 .segment Syscall
-SYSCALLS:
-  .byte JMP
+  SYSCALLS: .byte JMP
   .word syscall1
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall2
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall3
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall4
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall5
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall6
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall7
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall8
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall9
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall10
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall11
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall12
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall13
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall14
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall15
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall16
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall17
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word securentr
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word securexit
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall20
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall21
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall22
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall23
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall24
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall25
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall26
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall27
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall28
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall29
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall30
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall31
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall32
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall33
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall34
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall35
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall36
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall37
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall38
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall39
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall40
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall41
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall42
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall43
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall44
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall45
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall46
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall47
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall48
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall49
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall50
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall51
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall52
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall53
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall54
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall55
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall56
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall57
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall58
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall59
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall60
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall61
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall62
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall63
-  .byte NOP
-  .byte JMP
+  .byte NOP, JMP
   .word syscall64
   .byte NOP
   .align $100
-SYSCALL_RESET:
-  .byte JMP
+  SYSCALL_RESET: .byte JMP
   .word reset
   .byte NOP
