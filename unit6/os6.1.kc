@@ -494,11 +494,6 @@ char* sc = SCREEN+40;
     print_newline();
     print_newline();
     print_newline();
-   initialise_pdb(0,"program1.prg");
-load_program(0);
-resume_pdb(0);
-  print_newline();
- //   describe_pdb(0);
 // Start with empty message queue
 ipc_message_count=0;
 // Create message from PID 0 (OS) to PID 1 
@@ -509,6 +504,12 @@ initialise_pdb(0,"program1.prg");
 load_program(0);
 // Run the program
 resume_pdb(0);
+   initialise_pdb(0,"program1.prg");
+load_program(0);
+resume_pdb(0);
+  print_newline();
+ //   describe_pdb(0);
+
 
 
 
@@ -521,6 +522,64 @@ if(*RASTER==54 || *RASTER==66){
 }
 exit_hypervisor();
 }
+// Message structure: 16 bytes in total
+struct ipc_message {
+  unsigned char from;
+  unsigned char to;
+  unsigned char priority;
+  unsigned char sequence;
+  unsigned char[12] message;
+};
+// We will have 16 slots of 16 bytes at $CB00-$CBFF
+const unsigned char *ipc_messages = $CB00;
+volatile unsigned char ipc_message_count;
+void queue_message(unsigned char from, unsigned char to,
+                   unsigned char priority, unsigned char sequence,
+                   unsigned char *message)
+{
+  if (ipc_message_count>15) return;
+  struct ipc_message *m=(struct ipc_message *)
+    (ipc_messages+ipc_message_count*16);
+  m->from=from; m->to=to; m->priority=priority; m->sequence=sequence;
+  for(unsigned char i=0;i<12;i++) m->message[i]=message[i];
+  ipc_message_count=1;
+}
+void dequeue_message(unsigned char message_num)
+{
+  if (message_num>=ipc_message_count) return;
+  if (message_num==(ipc_message_count-1)) {
+    ipc_message_count--; return;
+  }
+  unsigned char *dest=(unsigned char *)
+    ((unsigned short)ipc_messages+message_num*16);
+  unsigned char *src=(unsigned char *)
+    ((unsigned short)ipc_messages+(ipc_message_count-1)*16);
+  for(unsigned char i=0;i<16;i++) dest[i]=src[i];
+  ipc_message_count--;
+}
+
+unsigned char get_next_message_id(unsigned char receiver)
+{
+  unsigned char best_message=0xff;
+  for(unsigned char i=0;i<16;i++) {
+    struct ipc_message *m=(struct ipc_message *)
+      (ipc_messages+i*16);
+    if (m->to==receiver) {
+      if (best_message==0xff) {
+        best_message=i;
+      }
+    }
+  }
+  return best_message;
+}
+struct ipc_message *get_pointer_to_message(unsigned char id)
+{
+  return (struct ipc_message *)
+    (ipc_messages+id*16);
+}
+
+
+
 
 void syscall1(){
 exit_hypervisor();
@@ -569,7 +628,7 @@ short)running_pdb)<<8));
   unsigned char message_id=get_next_message_id(caller_pid);
   if (message_id!=0xFF) {
     // We have a message to return
-    struct ipc_message*m=get_pointer_to_message(message_id);
+    struct ipc_message *m=get_pointer_to_message(message_id);
     // Copy it to the transfer area
     dma_copy((unsigned short)m,$0300,16);
     // De-queue the message
@@ -821,65 +880,6 @@ exit_hypervisor();
 void undefined_trap(){
 exit_hypervisor();
 }
-
-// Message structure: 16 bytes in total
-struct ipc_message {
-  unsigned char from;
-  unsigned char to;
-  unsigned char priority;
-  unsigned char sequence;
-  unsigned char[12] message;
-};
-// We will have 16 slots of 16 bytes at $CB00-$CBFF
-const unsigned char *ipc_messages = $CB00;
-volatile unsigned char ipc_message_count;
-void queue_message(unsigned char from, unsigned char to,
-                   unsigned char priority, unsigned char sequence,
-                   unsigned char *message)
-{
-  if (ipc_message_count>15) return;
-  struct ipc_message *m=(struct ipc_message *)
-    (ipc_messages+ipc_message_count*16);
-  m->from=from; m->to=to; m->priority=priority; m-
->sequence=sequence;
-  for(unsigned char i=0;i<12;i++) m->message[i]=message[i];
-  ipc_message_count=1;
-}
-void dequeue_message(unsigned char message_num)
-{
-  if (message_num>=ipc_message_count) return;
-  if (message_num==(ipc_message_count-1)) {
-    ipc_message_count--; return;
-  }
-  unsigned char *dest=(unsigned char *)
-    ((unsigned short)ipc_messages+message_num*16);
-  unsigned char *src=(unsigned char *)
-    ((unsigned short)ipc_messages+(ipc_message_count-1)*16);
-  for(unsigned char i=0;i<16;i++) dest[i]=src[i];
-  ipc_message_count--;
-}
-
-unsigned char get_next_message_id(unsigned char receiver)
-{
-  unsigned char best_message=0xff;
-  for(unsigned char i=0;i<16;i++) {
-    struct ipc_message *m=(struct ipc_message *)
-      (ipc_messages+i*16);
-    if (m->to==receiver) {
-      if (best_message==0xff) {
-        best_message=i;
-      }
-    }
-  }
-  return best_message;
-}
-struct ipc_message *get_pointer_to_message(unsigned char id)
-{
-  return (struct ipc_message *)
-    (ipc_messages+id*16);
-}
-
-
 
 #pragma data_seg(Syscall)
 
