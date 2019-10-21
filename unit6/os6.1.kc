@@ -585,8 +585,7 @@ short)running_pdb)<<8));
     exit_hypervisor();
   }
 }
-exit_hypervisor();
-}
+
 void syscall11(){
 exit_hypervisor();
 }
