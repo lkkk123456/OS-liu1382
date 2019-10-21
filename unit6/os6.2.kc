@@ -494,19 +494,22 @@ char* sc = SCREEN+40;
     print_newline();
     print_newline();
     print_newline();
+initialise_pdb(1,“program2.prg”);
+load_program(1);
+resume_pdb(1);
 // Start with empty message queue
 ipc_message_count=0;
 // Create message from PID 0 (OS) to PID 1 
-queue_message(0,1,1,1,"cpoint 6.1  ");
+//queue_message(0,1,1,1,"cpoint 6.1  ");
 // Initialise PDB slot 0 to hold program1
 initialise_pdb(0,"program1.prg");
 // Load the program
 load_program(0);
 // Run the program
-resume_pdb(0);
+//resume_pdb(0);
    initialise_pdb(0,"program1.prg");
 load_program(0);
-resume_pdb(0);
+//resume_pdb(0);
   print_newline();
  //   describe_pdb(0);
 
